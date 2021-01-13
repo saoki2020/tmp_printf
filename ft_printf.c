@@ -15,11 +15,14 @@
 int	get_field(const char **fmt, va_list *ap, t_data_flag *data)
 {
 	int num;
-
+//指定してなければ０
 	num = 0;
+	//.の次が＊だったら、apに入ってる引数からintのやつを読み取る
 	if (**fmt == '*')
 	{
 		num = va_arg(*ap, int);
+
+		//＊を表す引数が負の値=>「-」フラグと正の数ってことになる
 		if (num < 0)
 		{
 			num *= -1;
@@ -27,8 +30,10 @@ int	get_field(const char **fmt, va_list *ap, t_data_flag *data)
 		}
 		(*fmt)++;
 	}
+	//fmtのアドレスを一つ進めて、それが数字だったら
 	else if (ft_isdigit(**fmt))
 	{
+//[数字]を[数値に変換]。
 		while (ft_isdigit(**fmt))
 			num = num * 10 + (*((*fmt)++) - '0');
 	}
@@ -105,16 +110,7 @@ void	print_specifier_str(const char	**start, const char	**fmt,	int	*n,
 	num = print_data(start, fmt, ap, &data);
 	*n = ((*n == 0 || num >= 0) ? num : *n);
 }
-	/* no meaning */
-	// printf("%s\n",(char*)start);
 
-/* input flags check
-	printf("flag[0] = %d\n",data.flag[FLAG_ZERO]);
-	printf("flag[-] = %d\n",data.flag[FLAG_MINUS]);
-	printf("field = %d\n",data.field);
-	printf("precision = %d\n",data.precision);
-	printf("specifier = %d\n",data.specifier);
-*/
 
 
 int	ft_printf(const char *fmt, ...)
